@@ -1,6 +1,6 @@
 # Hoops Web Platform - Engine Scan Demo
 
-See this demo running live on [GitHub Pages](https://techsoft3d.github.io/2D-DWG-Drawing-Viewer/index.html?instance=HotelFloorplan).
+See this demo running live on [GitHub Pages](https://techsoft3d.github.io/Engine-Scan/).
 
 ## In order to run locally
 
