@@ -37,16 +37,19 @@
   <script type="text/javascript" src="javascripts/communicator_scripts/keymaster.min.js"></script>
   <script type="text/javascript" src="javascripts/communicator_scripts/iscroll.min.js"></script>
   <script type="text/javascript" src="javascripts/communicator_scripts/jquery.minicolors.min.js"></script>
-
-  <script type="text/javascript"
-    src="https://cdn.jsdelivr.net/gh/techsoft3d/hoops-web-viewer/hoops_web_viewer.js"></script>
-  <script type="text/javascript" src="javascripts/communicator_scripts/web_viewer_ui.js?v=latest" id="hwvUI"></script>
-  <script type="text/javascript"
-    src="javascripts/communicator_scripts/communicator_server_integration.js?v=latest"></script>
-  <script type="text/javascript" src="javascripts/communicator_scripts/sample.js?v=latest"></script>
   <script type="text/javascript" src="javascripts/conversionService.js"></script>
+  <script type="text/javascript" src="javascripts/common/load_scripts.js"></script>
 
-  <script type="module">
+
+
+
+  <script>
+    var hwv = null;
+    var ui = null;
+    var scanLoaded = false;
+    var scanVisible = false;
+    var solidVisible = true;
+
     const toggleScan = function () {
       scanVisible = !scanVisible;
       if (scanVisible) {
@@ -74,39 +77,6 @@
       }
     };
 
-    var hwv = null;
-    var ui = null;
-
-    var scanLoaded = false;
-    var scanVisible = false;
-    var solidVisible = true;
-
-
-    document.querySelector('.toolbar-tools').innerHTML += `
-                <div id="tool_separator_5" class="tool-separator"></div>
-                <div id="toggle-scan-button" title="Toggle Point Cloud Visibility" data-operatorclass="toolbar-toggle-scan" class="hoops-tool">
-                    <div class="tool-icon"></div>
-                </div>
-                <div id="toggle-solid-button" title="Toggle Solid Visibility" data-operatorclass="toolbar-toggle-solid" class="hoops-tool active-tool">
-                    <div class="tool-icon"></div>
-                </div>   
-            `;
-
-
-    hwv = await startViewer("01-2_block_v")
-
-    const uiConfig = {
-      containerId: "content",
-      screenConfiguration: Sample.screenConfiguration,
-    }
-    ui = new Communicator.Ui.Desktop.DesktopUi(hwv, uiConfig);
-
-
-    ui._toolbar._actionsNullary.set('toolbar-toggle-scan', toggleScan);
-    ui._toolbar._actionsNullary.set('toolbar-toggle-solid', toggleSolid);
-
-    window.onresize = function () { hwv.resizeCanvas(); };
-
     var findNode = function (nodeId, name) {
       var children = hwv.getModel().getNodeChildren(nodeId);
       for (var i = 0; i < children.length; i++) {
@@ -120,9 +90,15 @@
       return -1;
     };
 
-
   </script>
 
+  <script type="module">
+    await loadDynamicScript()
+    await loadIndividualScript("javascripts/communicator_scripts/web_viewer_ui.js")
+    await loadIndividualScript("javascripts/communicator_scripts/communicator_server_integration.js?v=latest")
+    await loadIndividualScript("javascripts/communicator_scripts/sample.js?v=latest")
+    initializeViewer()
+  </script>
 </head>
 
 <body>

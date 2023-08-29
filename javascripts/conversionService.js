@@ -32,3 +32,42 @@ async function startViewer(modelName) {
         return viewer;
 
 }
+
+async function fetchVersionNumber() {
+        const conversionServiceURI = "https://csapi.techsoft3d.com";
+
+        let res = await fetch(conversionServiceURI + '/api/hcVersion');
+        var data = await res.json();
+        versionNumer = data;
+        
+        return data
+
+}
+
+
+
+async function initializeViewer() {
+        document.querySelector('.toolbar-tools').innerHTML += `
+                    <div id="tool_separator_5" class="tool-separator"></div>
+                    <div id="toggle-scan-button" title="Toggle Point Cloud Visibility" data-operatorclass="toolbar-toggle-scan" class="hoops-tool">
+                        <div class="tool-icon"></div>
+                    </div>
+                    <div id="toggle-solid-button" title="Toggle Solid Visibility" data-operatorclass="toolbar-toggle-solid" class="hoops-tool active-tool">
+                        <div class="tool-icon"></div>
+                    </div>   
+                `;
+       
+        hwv = await startViewer("01-2_block_v")
+    
+        const uiConfig = {
+          containerId: "content",
+          screenConfiguration: Sample.screenConfiguration,
+        }
+        ui = new Communicator.Ui.Desktop.DesktopUi(hwv, uiConfig);
+    
+    
+        ui._toolbar._actionsNullary.set('toolbar-toggle-scan', toggleScan);
+        ui._toolbar._actionsNullary.set('toolbar-toggle-solid', toggleSolid);
+    
+        window.onresize = function () { hwv.resizeCanvas(); };
+}
